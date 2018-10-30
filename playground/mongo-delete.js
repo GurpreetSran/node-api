@@ -7,10 +7,10 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (error, db) => {
 
     console.log('Connected to Mongo DB Server');
     
-    db.collection('Todos').find({completed: true}).toArray().then((docs) => {
-        console.log(JSON.stringify(docs, undefined, 2));
+    db.collection('Todos').deleteMany({completed: true}).then((result) => {
+        console.log(JSON.stringify(result, undefined, 2));
     }, (err) => {
-        console.log('Unable to fetch docs')
+        console.log('Unable to delete docs')
     });
     
     db.close();
