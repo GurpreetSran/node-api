@@ -1,51 +1,27 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp', { useNewUrlParser: true });
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
-const Todo = mongoose.model('Todo', {
-    text: {
-        type: String,
-        required: true,
-        minlength: 1,
-        trim: true
-    },
-    completed: {
-        type: Boolean,
-        default: false
-    },
-    completedAt: {
-        type: Number,
-        default: null
-    }
+const app = express();
+
+app.use(bodyParser.json());
+
+app.post('/todos', (req, res) => {
+    const todo = new Todo({
+        text: req.body.text
+    });
+
+    todo.save().then((doc) => {
+        res.send(doc);
+    }, (error) => {
+        console.log('Error while saving todo ', error);
+        res.status(400).send(error);
+    })
 });
 
-const User = mongoose.model('User', {
-    email: {
-        type: String,
-        required: true,
-        minlength: 1,
-        trim: true
-    }
-});
-
-const newTodo = new Todo({
-    text: 'valid schema'
-});
-
-const newUser = new User({
-    email: 'zoxhere@yahoo.com'
-});
-
-newTodo.save().then((doc) => {
-    console.log('Saved todo ', doc);
-}, (error) => {
-    console.log('Saving todo error ', error);
-});
-
-
-newUser.save().then((doc) => {
-    console.log('Saved user ', doc);
-}, (error) => {
-    console.log('Saving user error ', error);
+app.listen(3000, () => {
+    console.log('Server running on 3000');
 });
