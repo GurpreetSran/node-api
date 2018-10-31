@@ -7,11 +7,11 @@ const {Todo} = require('./../models/todo');
 const todos = [
     {
         _id: new ObjectID(),
-        text: 'fist todo'
+        text: 'fist todo from automated test'
     },
     {
         _id: new ObjectID(),
-        text: 'second todo',
+        text: 'second todo from automated test',
         completed: true,
         completedAt: 333
     }
