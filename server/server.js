@@ -102,6 +102,27 @@ app.patch('/todos/:id', (req, res) => {
     });
 });
 
+app.post('/users', (req, res) => {
+    const body = _.pick(req.body, ['email', 'password']);
+
+    if (!body.email || !body.password) {
+        return res.status(404).send();
+    }
+
+    const user = new User(body);
+
+    user.save().then((user) => {
+        if (!user) {
+            return res.status(404).send();
+        }
+        return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth',token).send(user);
+    }) .catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
 app.listen(port, () => {
     console.log(`Server running on ${port}`);
 });
