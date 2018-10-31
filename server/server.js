@@ -6,6 +6,8 @@ const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 
+const port = process.env.PORT || 3000;
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -51,8 +53,8 @@ app.get('/todos/:id', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log('Server running on 3000');
+app.listen(port, () => {
+    console.log(`Server running on ${port}`);
 });
 
 module.exports = { app };
