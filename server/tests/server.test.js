@@ -15,6 +15,7 @@ describe('post/todos', () => {
         
         request(app)
             .post('/todos')
+            .set('x-auth', users[0].tokens[0].token)
             .send({text})
             .expect(200)
             .expect((response) => {
@@ -36,6 +37,7 @@ describe('post/todos', () => {
     it('should not create a new todo with invalid valid data', (done) => {        
         request(app)
             .post('/todos')
+            .set('x-auth', users[0].tokens[0].token)
             .send({})
             .expect(400)
             .end((err, response) => {
@@ -52,12 +54,13 @@ describe('post/todos', () => {
 });
 
 describe('GET /todos', () => {
-    it('should get all todos', (done) => {
+    it('should get all todos for current user', (done) => {
         request(app)
             .get('/todos')
+            .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .expect((response) => {
-                expect(response.body.todos.length).toBe(2);
+                expect(response.body.todos.length).toBe(1);
             })
             .end(done);
     });
